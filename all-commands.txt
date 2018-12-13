@@ -1,0 +1,68 @@
+== Prerequisites 
+
+- For Ubuntu 
+
+curl -O https://hyperledger.github.io/composer/latest/prereqs-ubuntu.sh 
+chmod u+x prereqs-ubuntu.sh
+ 
+
+- For Mac
+
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash
+
+# Restart terminal again 
+
+nvm install --lts 
+
+# Go to https://docs.docker.com/docker-for-mac/install/#download-docker-for-mac
+
+
+== Dev environment 
+
+npm install -g composer-cli
+npm install -g composer-rest-server
+npm install -g generator-hyperledger-composer
+npm install -g yo
+
+npm install -g composer-playground
+
+
+# Install visual studio code 
+
+== Fabric install 
+
+mkdir ~/fabric-tools && cd ~/fabric-tools
+
+curl -O https://raw.githubusercontent.com/hyperledger/composer-tools/master/packages/fabric-dev-servers/fabric-dev-servers.tar.gz
+
+tar -xvf fabric-dev-servers.tar.gz
+
+cd ~/fabric-tools
+
+./downloadFabric.sh
+
+./startFabric.sh
+# ./createPeerAdminCard.sh  # DO NOT DO THIS RIGHT NOW 
+
+composer-playground
+
+
+== Dev Tutorial 
+
+yo hyperledger-composer:businessnetwork
+
+# Edit files for model, logic and permissions 
+
+composer archive create -t dir -n .
+
+composer network install --card PeerAdmin@hlfv1 --archiveFile tutorial-network@0.0.1.bna
+
+composer network start --networkName tutorial-network --networkVersion 0.0.1 --networkAdmin admin --networkAdminEnrollSecret adminpw --card PeerAdmin@hlfv1 --file networkadmin.card
+
+composer card import --file networkadmin.card
+
+composer network ping --card admin@tutorial-network
+
+composer-rest-server
+#  admin@tutorial-network as the card name. 
+#  select all others as default 
